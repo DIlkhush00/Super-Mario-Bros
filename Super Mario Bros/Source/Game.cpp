@@ -15,6 +15,7 @@ void Game::run()
 
 	while (m_running)
 	{
+		inputEvents();
 		gameRendering();
 	}
 }
@@ -23,7 +24,7 @@ void Game::run()
 void Game::setup()
 {
 	// Setting up Game Window
-	m_window.create(sf::VideoMode(960, 640), "Super Mario Bros");
+	m_window.create(sf::VideoMode(1000, 640), "Super Mario Bros");
 
 	// Setting up Font - should wrap this in a function
 	const std::string font_path = "Assets/Fonts/ShortBaby.ttf";
@@ -41,7 +42,7 @@ void Game::setup()
 	m_coords.setString("0 , 0");
 
 	// Setting up Game Map
-	const std::string path = "Assets/Maps/shadow_dungeon_2.tmx"; // will change
+	const std::string path = "Assets/Maps/level-1.tmx"; // will change
 	m_gameMap.loadMap(path);
 	
 }
@@ -50,7 +51,7 @@ void Game::setup()
 
 void Game::setPaused(bool pause)
 {
-	pause = !pause;
+	m_paused = !pause;
 }
 
 
@@ -63,4 +64,35 @@ void Game::gameRendering()
 	m_window.draw(m_coords);
 
 	m_window.display();
+}
+
+
+
+void Game::inputEvents()
+{
+	sf::Event event;
+	while (m_window.pollEvent(event))
+	{
+		switch (event.type)
+		{
+		case sf::Event::Closed:
+			m_running = false;
+			break;
+
+		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::Escape)
+			{
+				m_running = false;
+			}
+			else if (event.key.code == sf::Keyboard::P)
+			{
+				setPaused(m_paused);
+			}
+			break;
+
+		default:
+			break;
+		}
+
+	}
 }

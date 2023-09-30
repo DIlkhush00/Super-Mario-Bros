@@ -17,6 +17,7 @@ class Game
 	void setPaused(bool pause);		// set the pause value
 
 	void gameRendering();			// and render the game
+	void inputEvents();				// handles events like pausing, closing the game etc..
 
 public:
 	Game();
