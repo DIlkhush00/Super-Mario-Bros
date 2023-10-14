@@ -8,3 +8,5 @@
 #include <tmxlite/ObjectGroup.hpp>
 
 #include <SFML/Graphics.hpp>
+
+#include "Components.h"

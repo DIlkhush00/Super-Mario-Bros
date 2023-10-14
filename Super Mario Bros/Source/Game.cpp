@@ -24,7 +24,7 @@ void Game::run()
 void Game::setup()
 {
 	// Setting up Game Window
-	m_window.create(sf::VideoMode(1000, 640), "Super Mario Bros");
+	m_window.create(sf::VideoMode(1000, 700), "Super Mario Bros");
 
 	// Setting up Font - should wrap this in a function
 	const std::string font_path = "Assets/Fonts/ShortBaby.ttf";
@@ -42,9 +42,17 @@ void Game::setup()
 	m_coords.setString("0 , 0");
 
 	// Setting up Game Map
-	const std::string path = "Assets/Maps/level-1.tmx"; // will change
+	const std::string path = "Assets/Maps/level-1.0.tmx"; // will change
 	m_gameMap.loadMap(path);
 	
+
+	// Camera setup 
+	m_view.setSize(sf::Vector2f(500.0f, 250.0f));
+	m_view.setCenter(sf::Vector2f(250.0f, 125.0f));
+
+	// Player setup
+	const std::string playerTex = "Assets/Player/mario-small.png";
+	m_gameMap.playerInit(playerTex);
 }
 
 
@@ -59,10 +67,9 @@ void Game::setPaused(bool pause)
 void Game::gameRendering()
 {
 	m_window.clear();
-
-	m_gameMap.drawMap(m_window);
-	m_window.draw(m_coords);
-
+	m_window.setView(m_view);
+	m_gameMap.drawMapAndPlayer(m_window);
+	m_window.draw(m_coords); 
 	m_window.display();
 }
 

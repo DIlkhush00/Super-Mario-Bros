@@ -156,11 +156,14 @@
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Map.cpp" />
+    <ClCompile Include="Source\Mario.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\Components.h" />
     <ClInclude Include="Header\Game.h" />
     <ClInclude Include="Header\Global.h" />
     <ClInclude Include="Header\Map.h" />
+    <ClInclude Include="Header\Mario.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

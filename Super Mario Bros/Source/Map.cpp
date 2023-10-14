@@ -1,5 +1,6 @@
 #include "../Header/Map.h"
 #include "../Header/Global.h"
+#include "../Header/Mario.h"
 
 using uint  =  unsigned int;
 using ull   =  unsigned long long int;
@@ -69,24 +70,30 @@ void Map::mapInit()
 
     for (auto& layer : layerVec)
     {
-
+        for (auto& prop : layer->getProperties())
+        {
+            std::cout << prop.getStringValue() << std::endl;
+        }
         // for each layer of objects
-        //if (layer->getType() == tmx::Layer::Type::Object)
-        //{
-        //    if (layer->getName() == "start_end")
-        //    {
-        //        std::cout << "start_end check!" << std::endl;
-        //        const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
-        //        const auto& objects = objectLayer.getObjects();
-        //        
-        //        for (const auto& object : objects)
-        //        {
-        //            //do stuff with object properties
-        //            tmx::FloatRect points = object.getAABB();
-        //            start_end.push_back(points);
-        //        }
-        //    }
-        //}
+        if (layer->getType() == tmx::Layer::Type::Object)
+        {
+            if (layer->getName() == "start")
+            {
+                std::cout << "start check!" << std::endl;
+                const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+                const auto& objects = objectLayer.getObjects();
+                
+                for (const auto& object : objects)
+                {
+                    // getting the starting position of mario
+                    m_marioStart.x = object.getPosition().x;
+                    m_marioStart.y = object.getPosition().y;
+
+                }
+
+                std::cout << "Starting Position: " << m_marioStart.x << ", " << m_marioStart.y << std::endl;
+            }
+        }
 
         // for each layer of tiles
         if (layer->getType() == tmx::Layer::Type::Tile)
@@ -144,7 +151,11 @@ void Map::mapInit()
     }
 }
 
-
+void Map::playerInit(const std::string& playerPath)
+{
+    m_mario.marioInit(playerPath);
+    m_mario.setStartPos(m_marioStart);
+}
 
 void Map::drawTile(const sf::Texture& tileTexture, uint tile_x, uint tile_y, uint t_width, uint t_height, uint row, uint col)
 {
@@ -169,12 +180,14 @@ void Map::drawTile(const sf::Texture& tileTexture, uint tile_x, uint tile_y, uin
 
 
 
-void Map::drawMap(sf::RenderWindow& window)
+void Map::drawMapAndPlayer(sf::RenderWindow& window)
 {
     // draw the tile on the screen
-
     for (const auto& tileSprite : m_tileSpriteVec)
     {
         window.draw(tileSprite);
     }
+
+    // draw mario on the screen
+    m_mario.drawMario(window);
 }
