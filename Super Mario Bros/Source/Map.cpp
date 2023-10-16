@@ -1,6 +1,7 @@
 #include "../Header/Map.h"
 #include "../Header/Global.h"
 #include "../Header/Mario.h"
+#include "../Header/Block.h"
 
 using uint  =  unsigned int;
 using ull   =  unsigned long long int;
@@ -93,6 +94,32 @@ void Map::mapInit()
 
                 std::cout << "Starting Position: " << m_marioStart.x << ", " << m_marioStart.y << std::endl;
             }
+            if (layer->getName() == "solid")
+            {
+                std::cout << "start check!" << std::endl;
+                const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+                const auto& objects = objectLayer.getObjects();
+
+                for (const auto& object : objects)
+                {
+                    uint x = object.getAABB().left;
+                    uint y = object.getAABB().top;
+                    uint width = object.getAABB().width;
+                    uint height = object.getAABB().height;
+
+                    sf::FloatRect block_AABB;
+                    block_AABB.left = x;
+                    block_AABB.top = y;
+                    block_AABB.width = width;
+                    block_AABB.height = height;
+
+                    Block block;
+                    sf::Vector2f block_Pos{ object.getPosition().x, object.getPosition().y };
+                    block.cCollision = std::make_shared<CCollision>(block_Pos.x, block_Pos.y, width, height);
+                    block.setAABB(block_AABB, block_Pos);
+                    solid_blocks.push_back(block);
+                }
+            }
         }
 
         // for each layer of tiles
@@ -151,10 +178,13 @@ void Map::mapInit()
     }
 }
 
-void Map::playerInit(const std::string& playerPath)
+void Map::playerInit(const std::string& playerPath, Mario& mario)
 {
-    m_mario.marioInit(playerPath);
-    m_mario.setStartPos(m_marioStart);
+    mario.marioInit(playerPath);
+    mario.setStartPos(m_marioStart);
+    mario.cTransform = std::make_shared<CTransform>(10.0f, 5.0f, m_marioStart);
+    mario.cInput = std::make_shared<CInput>();
+    mario.cCollision = std::make_shared<CCollision>(mario.getAABB().left, mario.getAABB().top, mario.getAABB().width, mario.getAABB().height);
 }
 
 void Map::drawTile(const sf::Texture& tileTexture, uint tile_x, uint tile_y, uint t_width, uint t_height, uint row, uint col)
@@ -180,14 +210,11 @@ void Map::drawTile(const sf::Texture& tileTexture, uint tile_x, uint tile_y, uin
 
 
 
-void Map::drawMapAndPlayer(sf::RenderWindow& window)
+void Map::drawMap(sf::RenderWindow& window)
 {
     // draw the tile on the screen
     for (const auto& tileSprite : m_tileSpriteVec)
     {
         window.draw(tileSprite);
     }
-
-    // draw mario on the screen
-    m_mario.drawMario(window);
 }

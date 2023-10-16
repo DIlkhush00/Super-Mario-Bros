@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>

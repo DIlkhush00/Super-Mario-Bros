@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Global.h"
-#include "../Header/Mario.h"
+#include "Mario.h"
+#include "Block.h"
 
 class Map
 {
 	tmx::Map m_map;
-	Mario m_mario;
 
 	unsigned int m_tile_width{ 0 };
 	unsigned int m_tile_height{ 0 };
@@ -30,9 +30,11 @@ class Map
 public:
 	Map();
 
-	void playerInit(const std::string& playerPath);	// load the player
-	void loadMap(const std::string& path);	// preparing the map - load(), loadTexture(), mapInit()
+	std::vector<Block> solid_blocks;
 
-	void drawMapAndPlayer(sf::RenderWindow& window); // drawing the map on the screen
+	void loadMap(const std::string& path);	// preparing the map - load(), loadTexture(), mapInit()
+	void playerInit(const std::string& playerPath, Mario& mario);	// load the player
+
+	void drawMap(sf::RenderWindow& window); // drawing the map on the screen
 };
 

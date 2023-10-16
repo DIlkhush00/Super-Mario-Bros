@@ -8,12 +8,14 @@
 class CTransform
 {
 public:
-	sf::Vector2f pos{ 0.0,0.0 };
-	sf::Vector2f velocity{ 0.0,0.0 };
+	float gravity{ 0 };
+	float speed{ 0 };
+	sf::Vector2f pos{0.0f, 0.0f};
 
-	CTransform(const sf::Vector2f& p, const sf::Vector2f& v)
-		: pos(p),
-		velocity(v) {}
+	CTransform(const float g, const float s, const sf::Vector2f p)
+		: gravity(g),
+		  speed(s) ,
+		  pos(p) {}
 };
 
 
@@ -48,8 +50,14 @@ public:
 class CCollision
 {
 public:
-	float radius{ 0 };
+	float x{ 0 };
+	float y{ 0 };
+	float width{ 0 };
+	float height{ 0 };
 
-	CCollision(float r)
-		: radius(r) {}
+	CCollision(float x, float y, float w, float h)
+		: x(x), 
+		  y(y),
+		  width(w),
+		  height(h) {}
 };
